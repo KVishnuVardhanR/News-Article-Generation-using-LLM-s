@@ -1,43 +1,36 @@
 # News-Article-Generation-using-LLM-s
 Llama 2 LLM for news article generation based on data obtained by media stack API.  
 
-# Background on fine-tuning LLMs
-
-![](https://archive.is/0iIXL/5f30742c57ad532b4cda9f1b48790dbcc7d00a85.webp)
-
-**Summary:**
-
-1. **LLM Pretraining:**
-   - Large Language Models (LLMs) are pretrained on extensive text corpora.
-   - Llama 2 was pretrained on a dataset of 2 trillion tokens, compared to BERT's training on BookCorpus and Wikipedia.
-   - Pretraining is resource-intensive and time-consuming.
-
-2. **Auto-Regressive Prediction:**
-   - Llama 2, an auto-regressive model, predicts the next token in a sequence.
-   - Auto-regressive models lack usefulness in providing instructions, leading to the need for instruction tuning.
-
-3. **Fine-Tuning Techniques:**
-   - Instruction tuning uses two main fine-tuning techniques:
-     a. Supervised Fine-Tuning (SFT): Trained on instruction-response datasets, minimizing differences between generated and actual responses.
-     b. Reinforcement Learning from Human Feedback (RLHF): Trained to maximize rewards based on human evaluations.
-
-4. **RLHF vs. SFT:**
-   - RLHF captures complex human preferences but requires careful reward system design and consistent human feedback.
-   - Direct Preference Optimization (DPO) might be a future alternative to RLHF.
-   - SFT can be highly effective when the model hasn't encountered specific data during pretraining.
-
-5. **Effective SFT Example:**
-   - LIMA paper showed improved performance of LLaMA v1 model over GPT-3 by fine-tuning on a small high-quality dataset.
-   - Data quality and model size (e.g., 65b parameters) are crucial for successful fine-tuning.
-
-6. **Base Llama 2 Model vs. Chat Version:**
-   - Specific prompt templates not necessary for base Llama 2 model, unlike the chat version.
-
-(Note: LLMs = Large Language Models, SFT = Supervised Fine-Tuning, RLHF = Reinforcement Learning from Human Feedback, DPO = Direct Preference Optimization)
-
 # Instructions to run the notebook
 You can run the notebook in **Google Colab**, make sure to chane the runtime to GPU for training and testing or Use the link to access the notebook and run all: https://colab.research.google.com/drive/1Pv9w_EMjEAwk9HsJigtzMimgOSZ95eXS?usp=sharing
 
+# Implementation steps
+1. **Installing Required Packages:**
+    - accelerate, peft, bitsandbytes, and transformers are installed using the pip command.
+
+2. **API Request to Fetch Articles:**
+   - The script fetches news articles using the **MediaStack API** with specified parameters.
+
+3. **Data Preprocessing:**
+   - The fetched articles are preprocessed using a custom function (preprocess_text). The processed text is then organized into a dataset.
+
+4. **Model and Fine-Tuning Parameters:**
+   - The script defines various parameters for fine-tuning, such as model names, **QLoRA parameters, bitsandbytes parameters, training arguments, SFT parameters, etc**.
+
+5. **Loading and Configuring Model:**
+   - The script loads the base language model using the specified model name and configures it with BitsAndBytes quantization.
+
+6. **Loading Tokenizer and LoRA Configuration:**
+   - **Tokenizer** and **QLoRA configuration** are loaded based on the model name.
+
+7. **Setting Training Parameters:**
+   - Training arguments are set, including output directory, number of epochs, batch sizes, learning rate, and other training-related parameters.
+
+8. **Supervised Fine-Tuning (SFT):**
+   - The SFTTrainer is instantiated with the model, dataset, and training arguments. The model is then fine-tuned using the train method.
+
+9. **Inference:**
+   - A sample prompt **("city!")** is given to the fine-tuned model, and the generated text is printed.
 
 # Dataset Formatting to train Llama 2 model
 As we need to follow the template of Llama 2 model for fine tuning, Lets create the data based on **Title** and **Description** of a news article.
